@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package com.example.android.trackmysleepquality.sleeptracker
+package com.example.android.trackmysleepquality.screen
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepDatabase
-import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
+import com.example.android.trackmysleepquality.screen.adapter.SleepNightAdapter
+import com.example.android.trackmysleepquality.sleeptracker.SleepTrackerViewModel
+import com.example.android.trackmysleepquality.sleeptracker.SleepTrackerViewModelFactory
 
 /**
  * A fragment with buttons to record start and end times for sleep, which are saved in
@@ -49,6 +52,7 @@ class SleepTrackerFragment : Fragment() {
         val binding: FragmentSleepTrackerBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_sleep_tracker, container, false
         )
+
         binding.lifecycleOwner = this
 
         // Create an instance of the ViewModel Factory.
@@ -56,14 +60,35 @@ class SleepTrackerFragment : Fragment() {
         val dataSource = SleepDatabase.getInstance(context).sleepDatabaseDao
         val viewModelFactory = SleepTrackerViewModelFactory(dataSource, context)
 
+
         // Get a reference to the ViewModel associated with this fragment.
         val sleepTrackerViewModel =
             ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
 
+
+        // To use the View Model with data binding, you have to explicitly
+        // give the binding object a reference to it.
         binding.sleepTrackerViewModel = sleepTrackerViewModel
+        
+
+        // Recycler View
+        val adapter = SleepNightAdapter()
+        binding.sleepList.layoutManager =
+            LinearLayoutManager(
+                getContext(), LinearLayoutManager.VERTICAL, false
+            )
+        binding.sleepList.adapter = adapter
+
+        // Update The RecyclerView Adapter
+        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
+
+
 
 
         return binding.root
     }
-
 }
