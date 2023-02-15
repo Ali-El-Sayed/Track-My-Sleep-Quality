@@ -4,15 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
 import com.example.android.trackmysleepquality.screen.adapter.SleepNightAdapter
+import com.example.android.trackmysleepquality.screen.adapter.SleepNightListener
 import com.example.android.trackmysleepquality.sleeptracker.SleepTrackerViewModel
 import com.example.android.trackmysleepquality.sleeptracker.SleepTrackerViewModelFactory
 
@@ -40,7 +45,7 @@ class SleepTrackerFragment : Fragment() {
         binding.lifecycleOwner = this
 
         // Create an instance of the ViewModel Factory.
-        val context = requireNotNull(this.activity).application
+        val context = requireActivity().application
         val dataSource = SleepDatabase.getInstance(context).sleepDatabaseDao
         val viewModelFactory = SleepTrackerViewModelFactory(dataSource, context)
 
@@ -55,12 +60,39 @@ class SleepTrackerFragment : Fragment() {
         binding.sleepTrackerViewModel = sleepTrackerViewModel
 
         // Recycler View
-        val adapter = SleepNightAdapter()
-        binding.sleepList.adapter = adapter
-        binding.sleepList.layoutManager = LinearLayoutManager(
-            getContext(), LinearLayoutManager.VERTICAL, false
-        )
+        val adapter = SleepNightAdapter(SleepNightListener { nightId ->
+            sleepTrackerViewModel.onSleepNightClicked(nightId)
+        })
+        sleepTrackerViewModel.navigateToSleepDetail.observe(
+            viewLifecycleOwner,
+            Observer { nightId ->
+                nightId?.let {
+                    val bundle = Bundle().apply {
+                        putLong("sleepNightKey", nightId)
+                    }
+                    val navigation =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navigation.navigate(
+                        R.id.action_sleep_tracker_fragment_to_sleepDetailFragment, bundle
+                    )
 
+
+                    sleepTrackerViewModel.onSleepDetailNavigated()
+
+                }
+            })
+
+
+        binding.sleepList.adapter = adapter
+        val gridLayoutManager = GridLayoutManager(
+            requireActivity(), 2, GridLayoutManager.VERTICAL, false
+        )
+        val linearLayoutManager = LinearLayoutManager(
+            requireActivity(), LinearLayoutManager.VERTICAL, false
+        )
+        binding.sleepList.layoutManager = gridLayoutManager
+
+       
         // Update The RecyclerView Adapter
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             it?.let {

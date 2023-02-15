@@ -22,11 +22,13 @@
             android:id="@+id/sleepList"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@+id/clear_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/start_button"
-            tools:listitem="@layout/list_item_sleep_night" />
+            app:spanCount="3"
+            tools:listitem="@layout/list_item_sleep_night_grid" />
 
         <Button
             android:id="@+id/start_button"
@@ -67,6 +69,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

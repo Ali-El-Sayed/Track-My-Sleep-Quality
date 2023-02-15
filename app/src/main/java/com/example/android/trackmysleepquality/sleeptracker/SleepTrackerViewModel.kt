@@ -18,13 +18,26 @@ class SleepTrackerViewModel(
     val database: SleepDatabaseDao, application: Application
 ) : ViewModel() {
     private var tonight = MutableLiveData<SleepNight?>()
+    private val _navigateToSleepDetail = MutableLiveData<Long>()
+    val navigateToSleepDetail
+        get() = _navigateToSleepDetail
+
     val nights = database.getAllNights()
+
     val nightsString = Transformations.map(nights) { nights ->
         formatNights(nights, application.resources)
     }
 
     init {
         initializeTonight()
+    }
+
+    fun onSleepNightClicked(id: Long) {
+        _navigateToSleepDetail.value = id
+    }
+
+    fun onSleepDetailNavigated() {
+        _navigateToSleepDetail.value = null
     }
 
     private fun initializeTonight() {
