@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:onClick="@{()->clickListener.onClick(sleep)}">
 
-    <ImageView
+        <ImageView
             android:id="@+id/quality_image"
             android:layout_width="@dimen/icon_size"
             android:layout_height="80dp"

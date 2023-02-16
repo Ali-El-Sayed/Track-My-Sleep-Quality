@@ -3,8 +3,8 @@
 
     <!-- App title and fragment titles -->
     <string name="app_name">Track My Sleep Quality</string>
-    <string name="sleep_tracker_fragment">SleepTrackerFragment</string>
-    <string name="sleep_quality_fragment">SleepQualityFragment</string>
+    <string name="sleep_tracker_fragment">Sleep Tracker</string>
+    <string name="sleep_quality_fragment">Sleep Quality</string>
 
     <!-- Button labels -->
     <string name="start">Start</string>
@@ -42,5 +42,7 @@
     <string name="hours_length">%d hours on %s</string>
     <string name="seconds_length">%d seconds on %s</string>
     <string name="close">Close</string>
+    <string name="sleep_detail_fragment">Sleep Details</string>
+    <string name="toggle_layout">Toggle Layout</string>
 
 </resources>

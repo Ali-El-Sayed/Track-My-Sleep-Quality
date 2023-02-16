@@ -14,17 +14,17 @@
             android:id="@+id/action_sleepTrackerFragment_to_sleepQualityFragment"
             app:destination="@id/sleep_quality_fragment"
             app:enterAnim="@anim/slide_in_right"
-            app:popEnterAnim="@anim/slide_in_right" />
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
         <action
+
             android:id="@+id/action_sleep_tracker_fragment_to_sleepDetailFragment"
             app:destination="@id/sleep_detail_fragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:popEnterAnim="@anim/slide_in_right" />
+            app:enterAnim="@anim/fragment_fade_enter" />
     </fragment>
 
     <fragment
         android:id="@+id/sleep_quality_fragment"
-        android:name="com.example.android.trackmysleepquality.sleepquality.SleepQualityFragment"
+        android:name="com.example.android.trackmysleepquality.screen.SleepQualityFragment"
         android:label="@string/sleep_quality_fragment"
         tools:layout="@layout/fragment_sleep_quality">
         <argument
@@ -39,9 +39,10 @@
     </fragment>
 
     <fragment
+
         android:id="@+id/sleep_detail_fragment"
         android:name="com.example.android.trackmysleepquality.sleepdetail.SleepDetailFragment"
-        android:label="fragment_sleep_detail"
+        android:label="@string/sleep_detail_fragment"
         tools:layout="@layout/fragment_sleep_detail">
         <argument
             android:name="sleepNightKey"
